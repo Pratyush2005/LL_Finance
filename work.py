@@ -560,7 +560,12 @@ def process_data_and_generate_reports(input_file_path):
         pdf_filenames = []
         
         for index, row in df.iterrows():
-            company_name = row.get('name', f'Company_{index}')
+            # FIXED: Use 'organization/name' instead of 'name' (note: organization with 'z')
+            company_name = row.get('organization/name', f'Company_{index}')
+            
+            # Handle NaN values properly
+            if pd.isna(company_name):
+                company_name = f'Company_{index}'
             employees = row.get('organization/estimated_num_employees', 100)
             industry = row.get('organization/industry', 'General')
             
